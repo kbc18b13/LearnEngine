@@ -1,0 +1,123 @@
+ここのMesh.cppのコメントが情報源です
+https://github.com/microsoft/DirectXMesh/blob/master/Meshconvert/Mesh.cpp
+
+struct Material
+	{
+        DirectX::XMFLOAT4   Ambient;
+        DirectX::XMFLOAT4   Diffuse;
+        DirectX::XMFLOAT4   Specular;
+        float               SpecularPower;
+        DirectX::XMFLOAT4   Emissive;
+        DirectX::XMFLOAT4X4 UVTransform;
+	};
+    
+struct SubMesh
+	{
+        UINT MaterialIndex;
+        UINT IndexBufferIndex;//どのインデックスバッファを使用するか(どのインデックスを使用するかではない)
+        UINT VertexBufferIndex;//どの頂点バッファを使用するか(どの頂点を使用するかではない)
+        UINT StartIndex;
+        UINT PrimCount;
+	};
+
+struct MeshExtents
+	{
+        float CenterX, CenterY, CenterZ;
+        float Radius;
+
+        float MinX, MinY, MinZ;
+        float MaxX, MaxY, MaxZ;
+	};
+
+ struct Vertex
+    {
+        DirectX::XMFLOAT3 Position;
+        DirectX::XMFLOAT3 Normal;
+        DirectX::XMFLOAT4 Tangent;
+        UINT color;
+        DirectX::XMFLOAT2 TextureCoordinates;
+    };
+
+const uint32_t NUM_BONE_INFLUENCES = 4;
+ 
+struct SkinningVertex
+{
+    UINT boneIndex[NUM_BONE_INFLUENCES];
+    float boneWeight[NUM_BONE_INFLUENCES];
+};
+
+ struct Bone
+    {
+        UINT ParentIndex;
+        DirectX::XMFLOAT4X4 InvBindPos;
+        DirectX::XMFLOAT4X4 BindPos;
+        DirectX::XMFLOAT4X4 LocalTransform;
+    };
+
+struct Keyframe
+    {
+        UINT BoneIndex;
+        float Time;
+        DirectX::XMFLOAT4X4 Transform;
+    };
+
+
+
+// .CMO files
+
+    // UINT - Mesh count
+    // { [Mesh count]
+    //      UINT - Length of name
+    //      wchar_t[] - Name of mesh (if length > 0)
+    //      UINT - Material count
+    //      { [Material count]
+    //          UINT - Length of material name
+    //          wchar_t[] - Name of material (if length > 0)
+    //          Material 構造体
+    //          UINT - Length of pixel shader name
+    //          wchar_t[] - Name of pixel shader (if length > 0)
+    //          { [8]
+    //              UINT - Length of texture name
+    //              wchar_t[] - Name of texture (if length > 0)
+    //          }
+    //      }
+    //      BYTE - スケルトン、アニメーションデータが存在する場合は「1」
+    //      UINT - SubMesh count
+    //      { [SubMesh count]
+    //          SubMesh 構造体
+    //      }
+    //      UINT - IB Count
+    //      { [IB Count]
+    //          UINT - Number of USHORTs in IB
+    //          USHORT[] - インデックスの配列
+    //      }
+    //      UINT - VB Count
+    //      { [VB Count]
+    //          UINT - Number of verts in VB
+    //          Vertex構造体[] - 頂点の配列
+    //      }
+    //      UINT - Skinning VB Count
+    //      { [Skinning VB Count]
+    //          UINT - Number of verts in Skinning VB
+    //          SkinningVertex構造体[] - 頂点のスキン用情報の配列
+    //      }
+    //      MeshExtents 構造体
+    //      [もしスケルトン、アニメーションデータが存在しないなら、メッシュはここで終わり]
+    //      UINT - Bone count
+    //      { [Bone count]
+    //          UINT - Length of bone name
+    //          wchar_t[] - Bone name (if length > 0)
+    //          Bone 構造体
+    //      }
+    //      UINT - Animation clip count
+    //      { [Animation clip count]
+    //          UINT - Length of clip name
+    //          wchar_t[] - Clip name (if length > 0)
+    //          float - Start time
+    //          float - End time
+    //          UINT - Keyframe count
+    //          { [Keyframe count]
+    //              Keyframe 構造体
+    //          }
+    //      }
+    // }
