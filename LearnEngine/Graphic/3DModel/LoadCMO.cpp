@@ -37,7 +37,10 @@ void skipName(std::fstream& input) {
 std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 	std::fstream input(filePath, std::ios_base::in || std::ios_base::binary);
 
-	UINT meshCount = loadT<UINT>(input);
+	UINT meshCount = loadT<UINT>(input);//メッシュの数
+
+	std::vector<std::unique_ptr<Mesh>> meshArray;
+	meshArray.reserve(meshCount);
 
 	for (int iMesh = 0; iMesh < meshCount; iMesh++) {
 
@@ -49,7 +52,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		std::unique_ptr<Material3D[]> materialArray(new Material3D[materialCount]);
 
 		for (int iMate = 0; iMate < meshCount; iMate++) {
-			std::unique_ptr<wchar_t[]> name = loadName(input);//名前
+			std::unique_ptr<wchar_t[]> name = loadName(input);//マテリアル名
 
 			std::unique_ptr<Material3DData> mateData(new Material3DData);//マテリアルデータ
 			loadT<Material3DData>(input, mateData.get());
@@ -143,15 +146,32 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			UINT skbCount = loadT<UINT>(input);
 			for (int iSkb = 0; iSkb < skbCount; iSkb++) {
 				UINT skCount = loadT<UINT>(input);
-				input.seekg(sizeof(SkinningVertex)* skCount, std::ios_base::cur);//サイズ分スキップ。
+				input.seekg(sizeof(SkinningVertex)* (long long)skCount, std::ios_base::cur);//サイズ分スキップ。
 			}
 		}
 
-		//メッシュエクステンツ
-		MeshExtents extents;
-		loadT<MeshExtents>(input, &extents);
+		//メッシュエクステンツ(使わない)
+		struct MeshExtents {
+			float CenterX, CenterY, CenterZ;
+			float Radius;
+
+			float MinX, MinY, MinZ;
+			float MaxX, MaxY, MaxZ;
+		};
+		input.seekg(sizeof(MeshExtents), std::ios_base::cur);//サイズ分スキップ。
+
+		//メッシュを作成
+		for (int iSub = 0; iSub < submeshCount; iSub++) {
+			CComPtr<ID3D11Buffer>& vb = vbArray[submeshArray[iSub].VertexBufferIndex];
+			CComPtr<ID3D11Buffer>& ib = ibArray[submeshArray[iSub].IndexBufferIndex];
+			UINT startIndex = submeshArray[iSub].StartIndex;
+			UINT primCount = submeshArray[iSub].PrimCount;
+			meshArray.push_back(std::make_unique<Mesh>(vb, ib, startIndex, primCount));
+		}
 
 	}
+
+	return std::make_unique<NonSkinModel>(std::move(meshArray));
 }
 
 }

@@ -3,24 +3,12 @@ namespace LearnEngine {
 
 class Mesh;
 
-struct MeshExtents {
-	float CenterX, CenterY, CenterZ;
-	float Radius;
-
-	float MinX, MinY, MinZ;
-	float MaxX, MaxY, MaxZ;
-};
-
 class NonSkinModel {
 public:
-	NonSkinModel(std::unique_ptr<std::unique_ptr<Mesh>[]>&& meshArray,
-				 UINT arraySize, const MeshExtents& extents);
+	NonSkinModel(std::vector<std::unique_ptr<Mesh>>&& meshArray);
 
 private:
-	std::unique_ptr<std::unique_ptr<Mesh>[]> meshArray;
-	UINT arraySize;
-
-	MeshExtents extents;  //バウンディングボックス, バウンディングスフィアの情報
+	std::vector<std::unique_ptr<Mesh>> meshArray;
 };
 
 }

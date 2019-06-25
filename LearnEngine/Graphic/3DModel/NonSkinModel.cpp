@@ -3,8 +3,7 @@
 
 namespace LearnEngine {
 
-NonSkinModel::NonSkinModel(std::unique_ptr<std::unique_ptr<Mesh>[]>&& meshArray,
-						   UINT arraySize, const MeshExtents& extents) :
-	meshArray(std::move(meshArray)), arraySize(arraySize), extents(extents) {}
+NonSkinModel::NonSkinModel(std::vector<std::unique_ptr<Mesh>>&& meshArray) :
+	meshArray(std::move(meshArray)) {}
 
 }
