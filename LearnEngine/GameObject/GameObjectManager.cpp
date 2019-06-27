@@ -18,7 +18,7 @@ void GameObjectManager::Update() {
 	for (int i = goArray.size(); i >= 0; i--) {
 		if (goArray[i]->isDeleted) {
 			delete goArray[i];
-			goArray.erase();
+			//goArray.erase();
 		}
 	}
 }

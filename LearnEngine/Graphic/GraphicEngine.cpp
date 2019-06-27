@@ -1,6 +1,12 @@
 #include "GraphicEngine.h"
 #include "..\\stdafx.h"
+#include "3DModel/NonSkinModel.h"
+#include "3DModel/LoadCMO.h"
 namespace LearnEngine {
+GraphicEngine::GraphicEngine() {
+}
+GraphicEngine::~GraphicEngine() {
+}
 
 void GraphicEngine::Init(HWND hwnd) {
 	//DirectX‚Ì‰Šú‰»
@@ -79,6 +85,8 @@ void GraphicEngine::Init(HWND hwnd) {
 	if (FAILED(result)) {
 		throw "Filed create DepthStencilView";
 	}
+
+	model = loadNonSkinModel("");
 }
 
 void GraphicEngine::Render() {
@@ -87,6 +95,7 @@ void GraphicEngine::Render() {
 	d3dContext->ClearRenderTargetView(targetView, color);
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
 
+	model->Draw();
 
 	swapChain->Present(0, 0);
 }

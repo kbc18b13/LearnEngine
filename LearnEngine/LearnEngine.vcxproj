@@ -154,7 +154,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Graphic\Camera\Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Graphic\GraphicEngine.cpp" />
@@ -163,15 +162,14 @@
     <ClCompile Include="Graphic\3DModel\Mesh.cpp" />
     <ClCompile Include="Graphic\3DModel\Material3D.cpp" />
     <ClCompile Include="Graphic\3DModel\LoadCMO.cpp" />
-    <ClCompile Include="Graphic\3DModel\LoadShader.cpp" />
-    <ClCompile Include="Graphic\Camera\PersCamera.cpp" />
-    <ClCompile Include="Math\CMatrix.cpp" />
+    <ClCompile Include="Graphic\Shader\LoadShader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Graphic\Shader\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphic\Camera\Camera.h" />
@@ -181,14 +179,12 @@
     <ClInclude Include="GameObject\IGameObject.h" />
     <ClInclude Include="Graphic\3DModel\Material3D.h" />
     <ClInclude Include="Graphic\3DModel\LoadCMO.h" />
-    <ClInclude Include="Graphic\3DModel\LoadShader.h" />
-    <ClInclude Include="Math\CMatrix.h" />
-    <ClInclude Include="Math\CVector3.h" />
+    <ClInclude Include="Graphic\Shader\LoadShader.h" />
     <ClInclude Include="Graphic\3DModel\NonSkinModel.h" />
     <ClInclude Include="Graphic\3DModel\Mesh.h" />
-    <ClInclude Include="Graphic\Camera\PersCamera.h" />
     <ClInclude Include="Resource\resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Graphic\Shader\VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\LearnEngine.rc" />

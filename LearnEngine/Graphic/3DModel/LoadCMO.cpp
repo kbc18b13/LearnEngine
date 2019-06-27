@@ -3,8 +3,9 @@
 #include "NonSkinModel.h"
 #include "Mesh.h"
 #include "Material3D.h"
-#include "LoadShader.h"
+#include "Graphic/Shader/LoadShader.h"
 #include "Engine.h"
+#include "Graphic/Shader/VertexShader.h"
 #include <fstream>
 
 namespace LearnEngine {
@@ -49,7 +50,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		UINT materialCount = loadT<UINT>(input);
 
 		//マテリアルが格納された配列
-		std::unique_ptr<Material3D[]> materialArray(new Material3D[materialCount]);
+		std::unique_ptr<Material3D* []> materialArray(new Material3D * [materialCount] {});
 
 		for (int iMate = 0; iMate < meshCount; iMate++) {
 			std::unique_ptr<wchar_t[]> name = loadName(input);//マテリアル名
@@ -63,9 +64,20 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 				skipName(input);//テクスチャ。8枚。今は使わないのでスキップ。
 			}
 
+			//デフォルトのシェーダー
 			CComPtr<ID3D11PixelShader> pixelShader = loadPixelShader("");
 
-			materialArray[iMate].Init(std::move(name), pixelShader, std::move(mateData));
+			D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TANGENT",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_SNORM,     0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXTURE",  0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			};
+
+			VertexShader vShader("", g_VertexDesc, 5);
+
+			materialArray[iMate] = new Material3D(std::move(name), vShader, pixelShader, std::move(mateData));
 		}
 
 		//これがスキンアニメーションモデルなら0以外が入る
@@ -166,7 +178,8 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			CComPtr<ID3D11Buffer>& ib = ibArray[submeshArray[iSub].IndexBufferIndex];
 			UINT startIndex = submeshArray[iSub].StartIndex;
 			UINT primCount = submeshArray[iSub].PrimCount;
-			meshArray.push_back(std::make_unique<Mesh>(vb, ib, startIndex, primCount));
+			std::unique_ptr<Material3D> material(materialArray[submeshArray[iSub].MaterialIndex]);
+			meshArray.push_back(std::make_unique<Mesh>(vb, ib, startIndex, primCount, std::move(material)));
 		}
 
 	}

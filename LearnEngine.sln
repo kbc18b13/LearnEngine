@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGame", "TestGame\TestGame.vcxproj", "{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LearnEngine", "LearnEngine\LearnEngine.vcxproj", "{EB73398E-4E7B-4A65-AB6A-37D67AA84D3D}"
 EndProject
 Global
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Debug|x64.ActiveCfg = Debug|x64
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Debug|x64.Build.0 = Debug|x64
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Debug|x86.ActiveCfg = Debug|Win32
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Debug|x86.Build.0 = Debug|Win32
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Release|x64.ActiveCfg = Release|x64
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Release|x64.Build.0 = Release|x64
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Release|x86.ActiveCfg = Release|Win32
-		{FECC8891-D79B-418A-A3A4-8EEBF2392DBD}.Release|x86.Build.0 = Release|Win32
 		{EB73398E-4E7B-4A65-AB6A-37D67AA84D3D}.Debug|x64.ActiveCfg = Debug|x64
 		{EB73398E-4E7B-4A65-AB6A-37D67AA84D3D}.Debug|x64.Build.0 = Debug|x64
 		{EB73398E-4E7B-4A65-AB6A-37D67AA84D3D}.Debug|x86.ActiveCfg = Debug|Win32

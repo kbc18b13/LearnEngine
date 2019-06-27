@@ -1,3 +1,5 @@
+#include "Graphic/Shader/VertexShader.h"
+
 namespace LearnEngine {
 
 struct Material3DData {
@@ -11,13 +13,16 @@ struct Material3DData {
 
 class Material3D {
 public:
-	Material3D();
-	void Init(std::unique_ptr<wchar_t[]>&& name,
-		const CComPtr<ID3D11PixelShader>& pShader,
-			  std::unique_ptr<Material3DData>&& data);
+	Material3D(std::unique_ptr<wchar_t[]>&& name,
+			   const VertexShader& vs,
+			   const CComPtr<ID3D11PixelShader>& pShader,
+			   std::unique_ptr<Material3DData>&& data);
+
+	void Apply();
 
 private:
 	std::unique_ptr<wchar_t[]> name;
+	VertexShader vShader;
 	CComPtr<ID3D11PixelShader> pShader;
 	std::unique_ptr<Material3DData> data;
 };

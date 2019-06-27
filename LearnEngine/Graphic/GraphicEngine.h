@@ -1,6 +1,11 @@
 namespace LearnEngine {
+class NonSkinModel;
+
 class GraphicEngine {
 public:
+	GraphicEngine();
+	~GraphicEngine();
+
 	void Init(HWND hWnd);
 
 	void Render();
@@ -22,8 +27,8 @@ private:
 	CComPtr<ID3D11Texture2D> depthStencil;
 	CComPtr<ID3D11DepthStencilView> dsView;
 
-	CComPtr <ID3D11InputLayout> inputLayout;
-
 	CComPtr <ID3D11RenderTargetView> targetView;//レンダーターゲットビュー
+
+	std::unique_ptr<NonSkinModel> model;
 };
 }

@@ -33,7 +33,7 @@ CComPtr<ID3D11PixelShader> loadPixelShader(const char* filePath) {
 
 CComPtr<ID3D11VertexShader> loadVertexShader(const char* filePath,
 											 std::unique_ptr<char[]>& binaryDist,
-											 size_t& binarySize) {
+											 size_t& binarySizeDist) {
 
 	FILE* file;
 	fopen_s(&file, filePath, "rb");
@@ -45,16 +45,16 @@ CComPtr<ID3D11VertexShader> loadVertexShader(const char* filePath,
 	{
 		struct stat fileStat;
 		stat(filePath, &fileStat);
-		binarySize = fileStat.st_size;
+		binarySizeDist = fileStat.st_size;
 	}
 
-	binaryDist.reset(new char[binarySize]);
+	binaryDist.reset(new char[binarySizeDist]);
 
-	fread_s(binaryDist.get(), binarySize, 1, binarySize, file);
+	fread_s(binaryDist.get(), binarySizeDist, 1, binarySizeDist, file);
 
 	CComPtr<ID3D11VertexShader> vertexShader;
 
-	D3DDevice()->CreateVertexShader(binaryDist.get(), binarySize, nullptr, &vertexShader);
+	D3DDevice()->CreateVertexShader(binaryDist.get(), binarySizeDist, nullptr, &vertexShader);
 
 	return vertexShader;
 }
