@@ -19,11 +19,11 @@ private:
 
 GameEngine& Engine();
 
-ID3D11Device* D3DDevice() {
+static inline ID3D11Device* D3DDevice() {
 	return Engine().getGraphic().getDevice();
 }
 
-ID3D11DeviceContext* D3DContext() {
+static inline ID3D11DeviceContext* D3DContext() {
 	return Engine().getGraphic().getContext();
 }
 

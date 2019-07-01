@@ -182,9 +182,12 @@
     <ClInclude Include="Graphic\Shader\LoadShader.h" />
     <ClInclude Include="Graphic\3DModel\NonSkinModel.h" />
     <ClInclude Include="Graphic\3DModel\Mesh.h" />
+    <ClInclude Include="Math\Matrix.h" />
+    <ClInclude Include="Math\Pi.h" />
     <ClInclude Include="Resource\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Graphic\Shader\VertexShader.h" />
+    <ClInclude Include="Math\Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\LearnEngine.rc" />

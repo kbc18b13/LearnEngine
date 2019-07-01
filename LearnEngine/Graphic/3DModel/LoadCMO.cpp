@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include "LoadCMO.h"
 #include "NonSkinModel.h"
@@ -23,15 +24,14 @@ void loadT(std::fstream& input, T* dist, UINT arrayLength = 1) {
 }
 
 std::unique_ptr<wchar_t[]> loadName(std::fstream& input) {
-	long long size = loadT<UINT>(input);
+	UINT size = loadT<UINT>(input);
 	std::unique_ptr<wchar_t[]> name(new wchar_t[size]);
-	input.read(reinterpret_cast<char*>(name.get()), sizeof(wchar_t) * size);
+	input.read(reinterpret_cast<char*>(name.get()), sizeof(wchar_t) * (long long)size);
 	return name;
 }
 
 void skipName(std::fstream& input) {
 	long long size = loadT<UINT>(input);
-	input.read(reinterpret_cast<char*>(&size), sizeof(UINT));
 	input.seekg(sizeof(wchar_t) * size, std::ios_base::cur);
 }
 
@@ -43,7 +43,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 	std::vector<std::unique_ptr<Mesh>> meshArray;
 	meshArray.reserve(meshCount);
 
-	for (int iMesh = 0; iMesh < meshCount; iMesh++) {
+	for (UINT iMesh = 0; iMesh < meshCount; iMesh++) {
 
 		skipName(input);//メッシュの名前は今回使用しないためスキップ。
 
@@ -52,7 +52,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		//マテリアルが格納された配列
 		std::unique_ptr<Material3D* []> materialArray(new Material3D * [materialCount] {});
 
-		for (int iMate = 0; iMate < meshCount; iMate++) {
+		for (UINT iMate = 0; iMate < meshCount; iMate++) {
 			std::unique_ptr<wchar_t[]> name = loadName(input);//マテリアル名
 
 			std::unique_ptr<Material3DData> mateData(new Material3DData);//マテリアルデータ
@@ -65,7 +65,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			}
 
 			//デフォルトのシェーダー
-			CComPtr<ID3D11PixelShader> pixelShader = loadPixelShader("");
+			CComPtr<ID3D11PixelShader> pixelShader = loadPixelShader("Shader\\DefaultPixel.cso");
 
 			D3D11_INPUT_ELEMENT_DESC g_VertexDesc[]{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0,                            0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -75,7 +75,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 				{ "TEXTURE",  0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 			};
 
-			VertexShader vShader("", g_VertexDesc, 5);
+			VertexShader vShader("Shader\\DefaultVertex.cso", g_VertexDesc, 5);
 
 			materialArray[iMate] = new Material3D(std::move(name), vShader, pixelShader, std::move(mateData));
 		}
@@ -94,7 +94,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		UINT submeshCount = loadT<UINT>(input);
 		std::unique_ptr<SubMesh[]> submeshArray(new SubMesh[submeshCount]);
 
-		for (int iSub = 0; iSub < submeshCount; iSub++) {
+		for (UINT iSub = 0; iSub < submeshCount; iSub++) {
 			loadT<SubMesh>(input, &submeshArray[iSub]);
 		}
 
@@ -103,7 +103,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		//インデックスバッファの配列
 		std::unique_ptr<CComPtr<ID3D11Buffer>[]> ibArray(new CComPtr<ID3D11Buffer>[ibCount]);
 
-		for (int iIb = 0; iIb < ibCount; iIb++) {
+		for (UINT iIb = 0; iIb < ibCount; iIb++) {
 
 			//ファイルからUSHORT配列を読み込む
 			UINT indexCount = loadT<UINT>(input);
@@ -128,7 +128,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		UINT vbCount = loadT<UINT>(input);
 		//頂点バッファの配列
 		std::unique_ptr<CComPtr<ID3D11Buffer>[]> vbArray(new CComPtr<ID3D11Buffer>[ibCount]);
-		for (int iVb = 0; iVb < vbCount; iVb++) {
+		for (UINT iVb = 0; iVb < vbCount; iVb++) {
 
 			//ファイルからVertex配列を読み込む
 			UINT vertexCount = loadT<UINT>(input);
@@ -156,7 +156,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 				float boneWeight[4];
 			};
 			UINT skbCount = loadT<UINT>(input);
-			for (int iSkb = 0; iSkb < skbCount; iSkb++) {
+			for (UINT iSkb = 0; iSkb < skbCount; iSkb++) {
 				UINT skCount = loadT<UINT>(input);
 				input.seekg(sizeof(SkinningVertex)* (long long)skCount, std::ios_base::cur);//サイズ分スキップ。
 			}
@@ -173,7 +173,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		input.seekg(sizeof(MeshExtents), std::ios_base::cur);//サイズ分スキップ。
 
 		//メッシュを作成
-		for (int iSub = 0; iSub < submeshCount; iSub++) {
+		for (UINT iSub = 0; iSub < submeshCount; iSub++) {
 			CComPtr<ID3D11Buffer>& vb = vbArray[submeshArray[iSub].VertexBufferIndex];
 			CComPtr<ID3D11Buffer>& ib = ibArray[submeshArray[iSub].IndexBufferIndex];
 			UINT startIndex = submeshArray[iSub].StartIndex;

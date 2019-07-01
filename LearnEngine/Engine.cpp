@@ -22,6 +22,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 }
 
 void GameEngine::InitEngine(HINSTANCE hInstance, int nCmdShow) {
+	//カレントディレクトリをResourceフォルダに
+	if (!SetCurrentDirectoryW(L"Resource")) {
+
+	}
+
 	WNDCLASSEXW wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);

@@ -27,4 +27,14 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shader\Const.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shader\DefaultPixel.hlsl" />
+    <FxCompile Include="Assets\Shader\DefaultVertex.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <MeshContentTask Include="Assets\ModelData\box.FBX" />
+  </ItemGroup>
 </Project>

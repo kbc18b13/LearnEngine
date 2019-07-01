@@ -86,14 +86,40 @@ void GraphicEngine::Init(HWND hwnd) {
 		throw "Filed create DepthStencilView";
 	}
 
-	model = loadNonSkinModel("");
+	model = loadNonSkinModel("ModelData\\box.cmo");
+	camera.setFar(100.0f);
+	camera.setNear(1.0f);
+	camera.setAspect(16.0f / 9);
+	camera.setFOV(DegToRad(90.0f));
+
+	camera.setLook({ 0, 0, 0 });
+	camera.setPos({ 0, 20.0f, 20.0f });
+	camera.setUp({ 0, 1, 0 });
+
+	D3D11_BUFFER_DESC cBufDesc{};
+	cBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cBufDesc.ByteWidth = sizeof(Matrix);
+	cBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cBufDesc.Usage = D3D11_USAGE_DYNAMIC;
+
+	D3D11_SUBRESOURCE_DATA cBuf{};
+	Matrix proj = camera.getProjMat();
+	cBuf.pSysMem = &proj;
+	d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &projCBuf);
+
+	Matrix view = camera.getViewMat();
+	cBuf.pSysMem = &view;
+	d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &viewCBuf);
 }
 
 void GraphicEngine::Render() {
+	d3dContext->VSSetConstantBuffers(0, 1, &projCBuf.p);
+	d3dContext->VSSetConstantBuffers(1, 1, &viewCBuf.p);
+
 	d3dContext->OMSetRenderTargets(1, &targetView, dsView);
 	float color[4] = { 0.5f,0.5f,0.5f,1 };
 	d3dContext->ClearRenderTargetView(targetView, color);
-	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
+	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	model->Draw();
 

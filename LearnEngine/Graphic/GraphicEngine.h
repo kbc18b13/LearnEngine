@@ -1,3 +1,6 @@
+#pragma once
+#include "Camera/Camera.h"
+
 namespace LearnEngine {
 class NonSkinModel;
 
@@ -28,6 +31,11 @@ private:
 	CComPtr<ID3D11DepthStencilView> dsView;
 
 	CComPtr <ID3D11RenderTargetView> targetView;//レンダーターゲットビュー
+
+	CComPtr<ID3D11Buffer> projCBuf;          //プロジェクション行列定数バッファ
+	CComPtr<ID3D11Buffer> viewCBuf;          //ビュー行列定数バッファ
+
+	Camera camera;
 
 	std::unique_ptr<NonSkinModel> model;
 };

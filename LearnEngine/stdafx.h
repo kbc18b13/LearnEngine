@@ -3,6 +3,9 @@
 
 //計算系
 #include <DirectXMath.h>
+#include "Math/Pi.h"
+#include "Math/Vector3.h"
+#include "Math/Matrix.h"
 
 //スマートポインタ
 #include <memory>

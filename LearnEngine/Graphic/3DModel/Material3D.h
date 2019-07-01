@@ -1,3 +1,4 @@
+#pragma once
 #include "Graphic/Shader/VertexShader.h"
 
 namespace LearnEngine {
