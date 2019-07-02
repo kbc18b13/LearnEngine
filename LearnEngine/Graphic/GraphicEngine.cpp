@@ -59,6 +59,14 @@ void GraphicEngine::Init(HWND hwnd) {
 		}
 	}
 
+	//ビューポートの設定
+	viewport.Height = rect.bottom - rect.top;
+	viewport.Width = rect.right - rect.left;
+	viewport.MaxDepth = 1.0f;
+	viewport.MinDepth = 0.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+
 	//深度ステンシルバッファ
 	D3D11_TEXTURE2D_DESC texDesc = {};
 	texDesc.Width = scDesc.BufferDesc.Width;
@@ -86,14 +94,24 @@ void GraphicEngine::Init(HWND hwnd) {
 		throw "Filed create DepthStencilView";
 	}
 
+	{//ラスタライザ設定。カリング設定したかっただけ。
+		D3D11_RASTERIZER_DESC rsDesc{};
+		rsDesc.CullMode = D3D11_CULL_NONE;
+		rsDesc.FillMode = D3D11_FILL_SOLID;
+		rsDesc.FrontCounterClockwise = true;
+		CComPtr<ID3D11RasterizerState> rsState;
+		d3dDevice->CreateRasterizerState(&rsDesc, &rsState);
+		d3dContext->RSSetState(rsState);
+	}
+
 	model = loadNonSkinModel("ModelData\\box.cmo");
-	camera.setFar(100.0f);
+	camera.setFar(200.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
 	camera.setFOV(DegToRad(90.0f));
 
 	camera.setLook({ 0, 0, 0 });
-	camera.setPos({ 0, 20.0f, 20.0f });
+	camera.setPos({ 0, 100.0f, 50.0f });
 	camera.setUp({ 0, 1, 0 });
 
 	D3D11_BUFFER_DESC cBufDesc{};
@@ -116,7 +134,9 @@ void GraphicEngine::Render() {
 	d3dContext->VSSetConstantBuffers(0, 1, &projCBuf.p);
 	d3dContext->VSSetConstantBuffers(1, 1, &viewCBuf.p);
 
-	d3dContext->OMSetRenderTargets(1, &targetView, dsView);
+	d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	d3dContext->RSSetViewports(1, &viewport);
+	d3dContext->OMSetRenderTargets(1, &targetView.p, dsView);
 	float color[4] = { 0.5f,0.5f,0.5f,1 };
 	d3dContext->ClearRenderTargetView(targetView, color);
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

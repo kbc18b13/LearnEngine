@@ -26,11 +26,15 @@ public:
 	}
 
 	Matrix getViewMat() {
-		return DirectX::XMMatrixLookAtLH(cameraPos, lookingPos, cameraUp);
+		DirectX::XMMATRIX m = DirectX::XMMatrixLookAtLH(cameraPos, lookingPos, cameraUp);
+		DirectX::XMMatrixTranspose(m);
+		return m;
 	}
 
 	Matrix getProjMat() {
-		return DirectX::XMMatrixPerspectiveFovLH(m_fov, m_aspect, m_near, m_far);
+		DirectX::XMMATRIX m = DirectX::XMMatrixPerspectiveFovLH(m_fov, m_aspect, m_near, m_far);
+		DirectX::XMMatrixTranspose(m);
+		return m;
 	}
 
 private:

@@ -6,9 +6,17 @@ cbuffer View : register(b1) {
 	float4x4 view;
 }
 
-float4 main(float3 pos : POSITION) : SV_POSITION
+struct NonSkinVertex {
+	float3 Position : POSITION;
+	float3 Normal : NORMAL;
+	float4 Tangent : TANGENT;
+	uint color : COLOR;
+	float2 TextureCoordinates : TEXTURE;
+};
+
+float4 main(NonSkinVertex pos : POSITION) : SV_POSITION
 {
-	float4 svpos = float4(pos.xyz, 1);
+	float4 svpos = float4(pos.Position.xyz, 1);
 
 	svpos = mul(svpos, view);
 	svpos = mul(svpos, proj);

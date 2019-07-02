@@ -32,6 +32,8 @@ private:
 
 	CComPtr <ID3D11RenderTargetView> targetView;//レンダーターゲットビュー
 
+	D3D11_VIEWPORT viewport;//ビューポート
+
 	CComPtr<ID3D11Buffer> projCBuf;          //プロジェクション行列定数バッファ
 	CComPtr<ID3D11Buffer> viewCBuf;          //ビュー行列定数バッファ
 

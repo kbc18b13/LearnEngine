@@ -20,7 +20,7 @@ T loadT(std::fstream& input) {
 
 template<typename T>
 void loadT(std::fstream& input, T* dist, UINT arrayLength = 1) {
-	input.read(reinterpret_cast<char*>(&dist), sizeof(T) * (long long)arrayLength);
+	input.read(reinterpret_cast<char*>(dist), sizeof(T) * (long long)arrayLength);
 }
 
 std::unique_ptr<wchar_t[]> loadName(std::fstream& input) {
@@ -32,7 +32,7 @@ std::unique_ptr<wchar_t[]> loadName(std::fstream& input) {
 
 void skipName(std::fstream& input) {
 	long long size = loadT<UINT>(input);
-	input.seekg(sizeof(wchar_t) * size, std::ios_base::cur);
+	input.ignore(size * sizeof(wchar_t));
 }
 
 std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
@@ -52,7 +52,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		//マテリアルが格納された配列
 		std::unique_ptr<Material3D* []> materialArray(new Material3D * [materialCount] {});
 
-		for (UINT iMate = 0; iMate < meshCount; iMate++) {
+		for (UINT iMate = 0; iMate < materialCount; iMate++) {
 			std::unique_ptr<wchar_t[]> name = loadName(input);//マテリアル名
 
 			std::unique_ptr<Material3DData> mateData(new Material3DData);//マテリアルデータ
@@ -127,7 +127,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 		//頂点バッファ
 		UINT vbCount = loadT<UINT>(input);
 		//頂点バッファの配列
-		std::unique_ptr<CComPtr<ID3D11Buffer>[]> vbArray(new CComPtr<ID3D11Buffer>[ibCount]);
+		std::unique_ptr<CComPtr<ID3D11Buffer>[]> vbArray(new CComPtr<ID3D11Buffer>[vbCount]);
 		for (UINT iVb = 0; iVb < vbCount; iVb++) {
 
 			//ファイルからVertex配列を読み込む
@@ -158,7 +158,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			UINT skbCount = loadT<UINT>(input);
 			for (UINT iSkb = 0; iSkb < skbCount; iSkb++) {
 				UINT skCount = loadT<UINT>(input);
-				input.seekg(sizeof(SkinningVertex)* (long long)skCount, std::ios_base::cur);//サイズ分スキップ。
+				input.ignore(sizeof(SkinningVertex)* (long long)skCount);//サイズ分スキップ。
 			}
 		}
 
@@ -170,7 +170,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			float MinX, MinY, MinZ;
 			float MaxX, MaxY, MaxZ;
 		};
-		input.seekg(sizeof(MeshExtents), std::ios_base::cur);//サイズ分スキップ。
+		input.ignore(sizeof(MeshExtents));//サイズ分スキップ。
 
 		//メッシュを作成
 		for (UINT iSub = 0; iSub < submeshCount; iSub++) {
