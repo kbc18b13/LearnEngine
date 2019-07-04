@@ -10,7 +10,7 @@ public:
 
 private:
 	CComPtr<ID3D11InputLayout> inputLayout;
-	CComPtr<ID3D11VertexShader> vertexShader;
+	CComPtr<ID3D11VertexShader> vertexShader = nullptr;
 };
 
 }

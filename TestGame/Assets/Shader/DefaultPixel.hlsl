@@ -1,4 +1,6 @@
-float4 main(float4 pos : SV_POSITION) : SV_TARGET
+#include "Const.hlsli"
+
+float4 main(PS_Input pos) : SV_TARGET
 {
-	return float4(1.0f, 0.0f, 0.0f, 1.0f);
+	return pos.color;
 }

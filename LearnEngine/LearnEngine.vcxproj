@@ -170,6 +170,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Graphic\Shader\VertexShader.cpp" />
+    <ClCompile Include="Graphic\3DModel\TestBox.cpp" />
+    <ClCompile Include="TestPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphic\Camera\Camera.h" />
@@ -188,6 +190,8 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Graphic\Shader\VertexShader.h" />
     <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Graphic\3DModel\TestBox.h" />
+    <ClInclude Include="TestPlane.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\LearnEngine.rc" />

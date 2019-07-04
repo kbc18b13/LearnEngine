@@ -2,6 +2,7 @@
 #include "..\\stdafx.h"
 #include "3DModel/NonSkinModel.h"
 #include "3DModel/LoadCMO.h"
+
 namespace LearnEngine {
 GraphicEngine::GraphicEngine() {
 }
@@ -100,18 +101,21 @@ void GraphicEngine::Init(HWND hwnd) {
 		rsDesc.FillMode = D3D11_FILL_SOLID;
 		rsDesc.FrontCounterClockwise = true;
 		CComPtr<ID3D11RasterizerState> rsState;
-		d3dDevice->CreateRasterizerState(&rsDesc, &rsState);
+		result = d3dDevice->CreateRasterizerState(&rsDesc, &rsState);
+		if (FAILED(result)) {
+			abort();
+		}
 		d3dContext->RSSetState(rsState);
 	}
 
 	model = loadNonSkinModel("ModelData\\box.cmo");
-	camera.setFar(200.0f);
+	camera.setFar(300.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
 	camera.setFOV(DegToRad(90.0f));
 
 	camera.setLook({ 0, 0, 0 });
-	camera.setPos({ 0, 100.0f, 50.0f });
+	camera.setPos(pos);
 	camera.setUp({ 0, 1, 0 });
 
 	D3D11_BUFFER_DESC cBufDesc{};
@@ -123,25 +127,57 @@ void GraphicEngine::Init(HWND hwnd) {
 	D3D11_SUBRESOURCE_DATA cBuf{};
 	Matrix proj = camera.getProjMat();
 	cBuf.pSysMem = &proj;
-	d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &projCBuf);
+	result = d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &projCBuf);
+	if (FAILED(result)) {
+		abort();
+	}
 
 	Matrix view = camera.getViewMat();
 	cBuf.pSysMem = &view;
-	d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &viewCBuf);
+	result = d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &viewCBuf);
+	if (FAILED(result)) {
+		abort();
+	}
+
+	box.Init();
 }
 
 void GraphicEngine::Render() {
+	if (GetAsyncKeyState('A')) {
+		pos.x += 0.1f;
+	}
+	if (GetAsyncKeyState('D')) {
+		pos.x -= 0.1f;
+	}
+	if (GetAsyncKeyState('W')) {
+		pos.z += 0.1f;
+	}
+	if (GetAsyncKeyState('S')) {
+		pos.z -= 0.1f;
+	}
+	camera.setPos(pos);
+
+	{
+		D3D11_MAPPED_SUBRESOURCE mapRes;
+		HRESULT res = d3dContext->Map(viewCBuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapRes);
+		if (FAILED(res)) {
+			abort();
+		}
+		*(static_cast<Matrix*>(mapRes.pData)) = camera.getViewMat();
+		d3dContext->Unmap(viewCBuf, 0);
+	}
+
 	d3dContext->VSSetConstantBuffers(0, 1, &projCBuf.p);
 	d3dContext->VSSetConstantBuffers(1, 1, &viewCBuf.p);
 
+	d3dContext->OMSetRenderTargets(1, &targetView.p, dsView);
 	d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	d3dContext->RSSetViewports(1, &viewport);
-	d3dContext->OMSetRenderTargets(1, &targetView.p, dsView);
 	float color[4] = { 0.5f,0.5f,0.5f,1 };
 	d3dContext->ClearRenderTargetView(targetView, color);
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	model->Draw();
+	box.Draw();
 
 	swapChain->Present(0, 0);
 }

@@ -4,7 +4,7 @@ namespace LearnEngine {
 
 class Material3D;
 
-class NonSkinVertex {
+struct NonSkinVertex {
 	DirectX::XMFLOAT3 Position;
 	DirectX::XMFLOAT3 Normal;
 	DirectX::XMFLOAT4 Tangent;

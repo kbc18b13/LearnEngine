@@ -1,3 +1,5 @@
+#include "Const.hlsli"
+
 cbuffer Projection : register(b0) {
 	float4x4 proj;
 }
@@ -10,16 +12,19 @@ struct NonSkinVertex {
 	float3 Position : POSITION;
 	float3 Normal : NORMAL;
 	float4 Tangent : TANGENT;
-	uint color : COLOR;
+	float4 color : COLOR;
 	float2 TextureCoordinates : TEXTURE;
 };
 
-float4 main(NonSkinVertex pos : POSITION) : SV_POSITION
+PS_Input main(NonSkinVertex pos)
 {
 	float4 svpos = float4(pos.Position.xyz, 1);
 
 	svpos = mul(svpos, view);
 	svpos = mul(svpos, proj);
 
-	return svpos;
+	PS_Input ps;
+	ps.Position = svpos;
+	ps.color = pos.color;
+	return ps;
 }

@@ -11,8 +11,11 @@ VertexShader::VertexShader(const char* filePath, const D3D11_INPUT_ELEMENT_DESC*
 	size_t vsBinSize;
 
 	vertexShader = loadVertexShader(filePath, vsBinary, vsBinSize);
-
-	D3DDevice()->CreateInputLayout(inputElements, numElement, vsBinary.get(), vsBinSize, &inputLayout);
+	HRESULT res;
+	res = D3DDevice()->CreateInputLayout(inputElements, numElement, vsBinary.get(), vsBinSize, &inputLayout);
+	if (FAILED(res)) {
+		abort();
+	}
 }
 
 void VertexShader::Apply() {

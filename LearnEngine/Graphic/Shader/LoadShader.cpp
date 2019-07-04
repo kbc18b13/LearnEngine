@@ -6,6 +6,7 @@
 
 namespace LearnEngine {
 CComPtr<ID3D11PixelShader> loadPixelShader(const char* filePath) {
+	HRESULT res;
 	FILE* file;
 	fopen_s(&file, filePath, "rb");
 
@@ -26,15 +27,17 @@ CComPtr<ID3D11PixelShader> loadPixelShader(const char* filePath) {
 
 	CComPtr<ID3D11PixelShader> pixelShader;
 
-	D3DDevice()->CreatePixelShader(binary.get(), fileSize, nullptr, &pixelShader);
-
+	res = D3DDevice()->CreatePixelShader(binary.get(), fileSize, nullptr, &pixelShader);
+	if (FAILED(res)) {
+		abort();
+	}
 	return pixelShader;
 }
 
 CComPtr<ID3D11VertexShader> loadVertexShader(const char* filePath,
 											 std::unique_ptr<char[]>& binaryDist,
 											 size_t& binarySizeDist) {
-
+	HRESULT res;
 	FILE* file;
 	fopen_s(&file, filePath, "rb");
 
@@ -54,8 +57,10 @@ CComPtr<ID3D11VertexShader> loadVertexShader(const char* filePath,
 
 	CComPtr<ID3D11VertexShader> vertexShader;
 
-	D3DDevice()->CreateVertexShader(binaryDist.get(), binarySizeDist, nullptr, &vertexShader);
-
+	res = D3DDevice()->CreateVertexShader(binaryDist.get(), binarySizeDist, nullptr, &vertexShader);
+	if (FAILED(res)) {
+		abort();
+	}
 	return vertexShader;
 }
 

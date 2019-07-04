@@ -1,6 +1,6 @@
 #pragma once
 #include "Camera/Camera.h"
-
+#include "3DModel/TestBox.h"
 namespace LearnEngine {
 class NonSkinModel;
 
@@ -38,7 +38,9 @@ private:
 	CComPtr<ID3D11Buffer> viewCBuf;          //ビュー行列定数バッファ
 
 	Camera camera;
+	Vector3 pos = {50,50,50};
 
 	std::unique_ptr<NonSkinModel> model;
+	TestBox box;
 };
 }
