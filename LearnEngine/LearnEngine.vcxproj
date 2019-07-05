@@ -186,6 +186,7 @@
     <ClInclude Include="Graphic\3DModel\Mesh.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Pi.h" />
+    <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Resource\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Graphic\Shader\VertexShader.h" />

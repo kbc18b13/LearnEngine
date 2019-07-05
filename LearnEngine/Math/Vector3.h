@@ -20,7 +20,7 @@ union Vector3 {
 		DirectX::XMStoreFloat3(&dxVec, v);
 	}
 
-	operator DirectX::XMVECTOR() {
+	operator DirectX::XMVECTOR() const{
 		return DirectX::XMLoadFloat3(&dxVec);
 	}
 
@@ -70,6 +70,14 @@ union Vector3 {
 		return *this;
 	}
 
+	float dot(const Vector3& v) const{
+		return DirectX::XMVector3Dot(*this, v).m128_f32[0];
+	}
+
+	Vector3 cross(const Vector3& v) const{
+		return DirectX::XMVector3Cross(*this, v);
+	}
+
 	float lengthSq()  const {
 		return x * x + y * y + z * z;
 	}
@@ -80,6 +88,20 @@ union Vector3 {
 
 	Vector3 normalize()  const {
 		return *this / length();
+	}
+
+///////////////////////Ç±Ç±Ç©ÇÁstaticä÷êî//////////////////////////////
+
+	static Vector3 AxisX() {
+		return Vector3(1, 0, 0);
+	}
+
+	static Vector3 AxisY() {
+		return Vector3(0, 1, 0);
+	}
+
+	static Vector3 AxisZ() {
+		return Vector3(0, 0, 1);
 	}
 };
 

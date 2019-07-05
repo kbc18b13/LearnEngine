@@ -110,6 +110,9 @@
     <ClInclude Include="TestPlane.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Icon.ico">

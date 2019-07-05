@@ -2,6 +2,7 @@
 #include "..\\stdafx.h"
 #include "3DModel/NonSkinModel.h"
 #include "3DModel/LoadCMO.h"
+#include "Math/Quaternion.h"
 
 namespace LearnEngine {
 GraphicEngine::GraphicEngine() {
@@ -108,7 +109,7 @@ void GraphicEngine::Init(HWND hwnd) {
 		d3dContext->RSSetState(rsState);
 	}
 
-	model = loadNonSkinModel("ModelData\\box.cmo");
+	model = loadNonSkinModel("ModelData\\pot.cmo");
 	camera.setFar(300.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
@@ -116,7 +117,7 @@ void GraphicEngine::Init(HWND hwnd) {
 
 	camera.setLook({ 0, 0, 0 });
 	camera.setPos(pos);
-	camera.setUp({ 0, 1, 0 });
+	camera.setUp(up);
 
 	D3D11_BUFFER_DESC cBufDesc{};
 	cBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -143,20 +144,27 @@ void GraphicEngine::Init(HWND hwnd) {
 }
 
 void GraphicEngine::Render() {
-	if (GetAsyncKeyState('A')) {
-		pos.x += 0.1f;
-	}
-	if (GetAsyncKeyState('D')) {
-		pos.x -= 0.1f;
-	}
+	const Vector3 eyeline = Vector3(0, 0, 0) - pos;
+	Vector3 axis = up.cross(eyeline);
+
+	Quaternion q;
 	if (GetAsyncKeyState('W')) {
-		pos.z += 0.1f;
+		q.multiply(Quaternion::GetRotationDeg(axis, 0.2f));
 	}
 	if (GetAsyncKeyState('S')) {
-		pos.z -= 0.1f;
+		q.multiply(Quaternion::GetRotationDeg(axis, -0.2f));
 	}
-	camera.setPos(pos);
+	if (GetAsyncKeyState('A')) {
+		q.multiply(Quaternion::GetRotationDeg(Vector3::AxisY(), 0.2f));
+	}
+	if (GetAsyncKeyState('D')) {
+		q.multiply(Quaternion::GetRotationDeg(Vector3::AxisY(), -0.2f));
+	}
+	q.rotateVec(up);
+	q.rotateVec(pos);
 
+	camera.setPos(pos);
+	camera.setUp(up);
 	{
 		D3D11_MAPPED_SUBRESOURCE mapRes;
 		HRESULT res = d3dContext->Map(viewCBuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapRes);
@@ -178,7 +186,7 @@ void GraphicEngine::Render() {
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	box.Draw();
-
+	//model->Draw();
 	swapChain->Present(0, 0);
 }
 

@@ -38,7 +38,8 @@ private:
 	CComPtr<ID3D11Buffer> viewCBuf;          //ビュー行列定数バッファ
 
 	Camera camera;
-	Vector3 pos = {50,50,50};
+	Vector3 pos = {0,0,80};
+	Vector3 up = { 0, 1, 0 };
 
 	std::unique_ptr<NonSkinModel> model;
 	TestBox box;

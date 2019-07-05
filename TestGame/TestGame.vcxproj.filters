@@ -36,5 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\ModelData\box.FBX" />
+    <MeshContentTask Include="Assets\ModelData\pot.FBX" />
   </ItemGroup>
 </Project>

@@ -36,7 +36,7 @@ void skipName(std::fstream& input) {
 }
 
 std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
-	std::fstream input(filePath, std::ios_base::in || std::ios_base::binary);
+	std::fstream input(filePath, std::ios_base::in | std::ios_base::binary);
 
 	UINT meshCount = loadT<UINT>(input);//メッシュの数
 
@@ -108,8 +108,11 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			//ファイルからUSHORT配列を読み込む
 			UINT indexCount = loadT<UINT>(input);
 			std::unique_ptr<USHORT[]> indexArray(new USHORT[indexCount]);
+			for (UINT i = 0; i < indexCount; i++) {
+				indexArray[i] = 0;
+			}
 			loadT<USHORT>(input, indexArray.get(), indexCount);
-
+			int nnnn = input.rdstate();
 			//バッファ説明を書いて、
 			D3D11_BUFFER_DESC bufDesc{};
 			bufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
