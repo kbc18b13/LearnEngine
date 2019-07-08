@@ -25,6 +25,6 @@ PS_Input main(NonSkinVertex pos)
 
 	PS_Input ps;
 	ps.Position = svpos;
-	ps.color = pos.color;
+	ps.texUV = pos.TextureCoordinates;
 	return ps;
 }

@@ -184,6 +184,7 @@
       <FileType>Document</FileType>
     </MeshContentTask>
     <MeshContentTask Include="Assets\ModelData\pot.FBX" />
+    <MeshContentTask Include="Assets\ModelData\texbox.FBX" />
     <None Include="Assets\Shader\Const.hlsli" />
   </ItemGroup>
   <ItemGroup>

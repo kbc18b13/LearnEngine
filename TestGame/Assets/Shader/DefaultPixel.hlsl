@@ -1,6 +1,9 @@
 #include "Const.hlsli"
 
-float4 main(PS_Input pos) : SV_TARGET
+Texture2D tex : register(t0);
+SamplerState samp : register(s0);
+
+float4 main(PS_Input input) : SV_TARGET
 {
-	return pos.color;
+	return tex.Sample(samp, input.texUV);
 }

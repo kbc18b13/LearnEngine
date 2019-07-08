@@ -109,7 +109,7 @@ void GraphicEngine::Init(HWND hwnd) {
 		d3dContext->RSSetState(rsState);
 	}
 
-	model = loadNonSkinModel("ModelData\\pot.cmo");
+	model = loadNonSkinModel("ModelData\\texbox.cmo");
 	camera.setFar(300.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
@@ -185,8 +185,8 @@ void GraphicEngine::Render() {
 	d3dContext->ClearRenderTargetView(targetView, color);
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	box.Draw();
-	//model->Draw();
+	//box.Draw();
+	model->Draw();
 	swapChain->Present(0, 0);
 }
 

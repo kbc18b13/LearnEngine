@@ -1,13 +1,17 @@
 #pragma once
 #include "stdafx.h"
+#include "Engine.h"
+#include <fstream>
+#include <string>
+
 #include "LoadCMO.h"
 #include "NonSkinModel.h"
 #include "Mesh.h"
 #include "Material3D.h"
 #include "Graphic/Shader/LoadShader.h"
-#include "Engine.h"
 #include "Graphic/Shader/VertexShader.h"
-#include <fstream>
+
+#include "Graphic/Texture/Texture.h"
 
 namespace LearnEngine {
 
@@ -27,6 +31,17 @@ std::unique_ptr<wchar_t[]> loadName(std::fstream& input) {
 	UINT size = loadT<UINT>(input);
 	std::unique_ptr<wchar_t[]> name(new wchar_t[size]);
 	input.read(reinterpret_cast<char*>(name.get()), sizeof(wchar_t) * (long long)size);
+	return name;
+}
+
+std::unique_ptr<wchar_t[]> combineLoadName(const wchar_t* front ,std::fstream& input) {
+	const UINT size = loadT<UINT>(input);
+	const size_t frontLength = wcslen(front);
+	std::unique_ptr<wchar_t[]> name(new wchar_t[size + frontLength]);
+	wchar_t* loadP = name.get();
+	wcscpy_s(name.get(), frontLength+1, front);
+	loadP += frontLength;
+	input.read(reinterpret_cast<char*>(loadP), sizeof(wchar_t) * (long long)size);
 	return name;
 }
 
@@ -60,9 +75,19 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 
 			skipName(input);//ピクセルシェーダ名。使わないのでスキップ。
 
+			//テクスチャーを8つ読み込む
+			std::unique_ptr<Texture> textures[8];
 			for (int iTex = 0; iTex < 8; iTex++) {
-				skipName(input);//テクスチャ。8枚。今は使わないのでスキップ。
+				textures[iTex] = std::make_unique<Texture>();
+				textures[iTex]->loadTexture(combineLoadName(L"ModelData\\", input).get());
 			}
+
+			//デフォルトのサンプラー
+			D3D11_SAMPLER_DESC smpDesc{};
+			smpDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			smpDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+			smpDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+			smpDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
 			//デフォルトのシェーダー
 			CComPtr<ID3D11PixelShader> pixelShader = loadPixelShader("Shader\\DefaultPixel.cso");
@@ -77,7 +102,8 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 
 			VertexShader vShader("Shader\\DefaultVertex.cso", g_VertexDesc, 5);
 
-			materialArray[iMate] = new Material3D(std::move(name), vShader, pixelShader, std::move(mateData));
+			materialArray[iMate] = new Material3D(std::move(name), vShader, pixelShader, std::move(mateData),
+												  std::move(textures), smpDesc);
 		}
 
 		//これがスキンアニメーションモデルなら0以外が入る

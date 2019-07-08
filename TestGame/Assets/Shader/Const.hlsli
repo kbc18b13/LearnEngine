@@ -1,4 +1,4 @@
 struct PS_Input {
 	float4 Position : SV_POSITION;
-	float4 color : PS_COLOR;
+	float2 texUV : PS_UV;
 };
