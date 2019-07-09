@@ -184,7 +184,9 @@
       <FileType>Document</FileType>
     </MeshContentTask>
     <MeshContentTask Include="Assets\ModelData\pot.FBX" />
+    <MeshContentTask Include="Assets\ModelData\sankaku.FBX" />
     <MeshContentTask Include="Assets\ModelData\texbox.FBX" />
+    <MeshContentTask Include="Assets\ModelData\unityChan.fbx" />
     <None Include="Assets\Shader\Const.hlsli" />
   </ItemGroup>
   <ItemGroup>

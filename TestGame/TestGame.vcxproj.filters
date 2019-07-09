@@ -38,5 +38,7 @@
     <MeshContentTask Include="Assets\ModelData\box.FBX" />
     <MeshContentTask Include="Assets\ModelData\pot.FBX" />
     <MeshContentTask Include="Assets\ModelData\texbox.FBX" />
+    <MeshContentTask Include="Assets\ModelData\unityChan.fbx" />
+    <MeshContentTask Include="Assets\ModelData\sankaku.FBX" />
   </ItemGroup>
 </Project>

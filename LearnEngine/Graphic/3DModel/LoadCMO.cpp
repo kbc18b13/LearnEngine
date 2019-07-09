@@ -23,7 +23,7 @@ T loadT(std::fstream& input) {
 }
 
 template<typename T>
-void loadT(std::fstream& input, T* dist, UINT arrayLength = 1) {
+inline void loadT(std::fstream& input, T* dist, UINT arrayLength = 1) {
 	input.read(reinterpret_cast<char*>(dist), sizeof(T) * (long long)arrayLength);
 }
 
@@ -164,6 +164,11 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			std::unique_ptr<NonSkinVertex[]> vertexArray(new NonSkinVertex[vertexCount]);
 			loadT<NonSkinVertex>(input, vertexArray.get(), vertexCount);
 
+			//逆さまになってるテクスチャ座標を修正(なんで逆さまなのかしらん)
+			for (UINT v = 0; v < vertexCount; v++) {
+				vertexArray[v].TextureCoordinates.y = 1.0f - vertexArray[v].TextureCoordinates.y;
+			}
+
 			//バッファ説明を書いて、
 			D3D11_BUFFER_DESC bufDesc{};
 			bufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -200,6 +205,39 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 			float MaxX, MaxY, MaxZ;
 		};
 		input.ignore(sizeof(MeshExtents));//サイズ分スキップ。
+
+		//ボーンとアニメーションをスキップ。ノンスキンモデルでは用は無いので。
+		if (isAnim) {
+			struct Bone {
+				UINT ParentIndex;
+				DirectX::XMFLOAT4X4 InvBindPos;
+				DirectX::XMFLOAT4X4 BindPos;
+				DirectX::XMFLOAT4X4 LocalTransform;
+			};
+			UINT boneCount = loadT<UINT>(input);
+			for (UINT i = 0; i < boneCount; i++) {
+				skipName(input);
+				input.ignore(sizeof(Bone));//ボーンをスキップ
+			}
+
+			struct Keyframe {
+				UINT BoneIndex;
+				float Time;
+				DirectX::XMFLOAT4X4 Transform;
+			};
+			UINT clipCount = loadT<UINT>(input);
+			for (UINT i = 0; i < clipCount; i++) {
+				skipName(input);
+				input.ignore(sizeof(float)*2);//スタートとエンドのタイム情報をスキップ
+
+				UINT keyCount = loadT<UINT>(input);
+				for (UINT k = 0; k < keyCount; k++) {
+					input.ignore(sizeof(Keyframe));//キーフレームをスキップ
+				}
+			}
+		}
+		//ここまでボーンとアニメーションのスキップ。
+
 
 		//メッシュを作成
 		for (UINT iSub = 0; iSub < submeshCount; iSub++) {

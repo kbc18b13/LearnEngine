@@ -98,7 +98,7 @@ void GraphicEngine::Init(HWND hwnd) {
 
 	{//ラスタライザ設定。カリング設定したかっただけ。
 		D3D11_RASTERIZER_DESC rsDesc{};
-		rsDesc.CullMode = D3D11_CULL_NONE;
+		rsDesc.CullMode = D3D11_CULL_BACK;
 		rsDesc.FillMode = D3D11_FILL_SOLID;
 		rsDesc.FrontCounterClockwise = true;
 		CComPtr<ID3D11RasterizerState> rsState;
@@ -109,8 +109,8 @@ void GraphicEngine::Init(HWND hwnd) {
 		d3dContext->RSSetState(rsState);
 	}
 
-	model = loadNonSkinModel("ModelData\\texbox.cmo");
-	camera.setFar(300.0f);
+	model = loadNonSkinModel("ModelData\\unityChan.cmo");
+	camera.setFar(200.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
 	camera.setFOV(DegToRad(90.0f));
