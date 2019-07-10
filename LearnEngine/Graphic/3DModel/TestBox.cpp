@@ -31,11 +31,11 @@ void TestBox::Init() {
 		if (-1 == (y = i - 1))y = 2;
 
 		for (int j = 0; j < 2; j++) {
-			v[i] = (1 == j) ? -25 : 25;
+			v[i] = (1 == j) ? -25.f : 25.f;
 
 			for (int k = 0; k < 4; k++) {
-				v[x] = (2 <= k) ? -25 : 25;
-				v[y] = (1 == k || 2 == k) ? -25 : 25;
+				v[x] = (2 <= k) ? -25.f : 25.f;
+				v[y] = (1 == k || 2 == k) ? -25.f : 25.f;
 				vArray[i * 8 + j * 4 + k].Position = { v[0], v[1], v[2] };
 
 				vArray[i * 8 + j * 4 + k].color.w = 1;

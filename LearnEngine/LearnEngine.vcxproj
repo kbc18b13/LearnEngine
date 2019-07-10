@@ -160,6 +160,8 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="Graphic\Camera\Camera.cpp" />
+    <ClCompile Include="Graphic\ConstBuffer\ConstBuffer.cpp" />
     <ClCompile Include="Graphic\GraphicEngine.cpp" />
     <ClCompile Include="GameObject\IGameObject.cpp" />
     <ClCompile Include="Graphic\3DModel\NonSkinModel.cpp" />
@@ -181,16 +183,19 @@
     <ClInclude Include="Graphic\Camera\Camera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
+    <ClInclude Include="Graphic\ConstBuffer\ConstBuffer.h" />
     <ClInclude Include="Graphic\GraphicEngine.h" />
     <ClInclude Include="GameObject\IGameObject.h" />
     <ClInclude Include="Graphic\3DModel\Material3D.h" />
     <ClInclude Include="Graphic\3DModel\LoadCMO.h" />
+    <ClInclude Include="Graphic\Light\DirectionLight.h" />
     <ClInclude Include="Graphic\Shader\LoadShader.h" />
     <ClInclude Include="Graphic\3DModel\NonSkinModel.h" />
     <ClInclude Include="Graphic\3DModel\Mesh.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Pi.h" />
     <ClInclude Include="Math\Quaternion.h" />
+    <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Resource\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Graphic\Shader\VertexShader.h" />

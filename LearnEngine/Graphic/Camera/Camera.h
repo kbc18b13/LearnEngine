@@ -1,8 +1,14 @@
 #pragma once
+
 namespace LearnEngine {
+
+class ConstBuffer;
 
 class Camera {
 public:
+	Camera();
+	~Camera();
+
 	void setLook(const Vector3& look) {
 		lookingPos = look;
 	}
@@ -37,15 +43,18 @@ public:
 		return m;
 	}
 
+	//現在の設定をシェーダーの定数バッファに適用する。
+	void Apply();
+
 private:
 	Vector3 cameraPos;
 	Vector3 lookingPos;
 	Vector3 cameraUp;
 
-	float m_far;
-	float m_near;
-	float m_aspect;
-	float m_fov;
+	float m_far = 0;
+	float m_near = 0;
+	float m_aspect = 0;
+	float m_fov = 0;
 };
 
 }

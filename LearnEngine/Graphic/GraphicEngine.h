@@ -1,6 +1,8 @@
 #pragma once
 #include "Camera/Camera.h"
 #include "3DModel/TestBox.h"
+#include "ConstBuffer/ConstBuffer.h"
+
 namespace LearnEngine {
 class NonSkinModel;
 
@@ -11,6 +13,7 @@ public:
 
 	void Init(HWND hWnd);
 
+	//毎フレーム呼ぶ描画関数
 	void Render();
 
 	ID3D11Device* getDevice() {
@@ -19,6 +22,10 @@ public:
 
 	ID3D11DeviceContext* getContext() {
 		return d3dContext;
+	}
+
+	ConstBuffer& getCBuffer() {
+		return cBuffer;
 	}
 
 private:
@@ -34,12 +41,12 @@ private:
 
 	D3D11_VIEWPORT viewport;//ビューポート
 
-	CComPtr<ID3D11Buffer> projCBuf;          //プロジェクション行列定数バッファ
-	CComPtr<ID3D11Buffer> viewCBuf;          //ビュー行列定数バッファ
+	ConstBuffer cBuffer;
 
 	Camera camera;
 	Vector3 pos = {0,0,70};
 	Vector3 up = { 0, 1, 0 };
+	Vector3 mpos = { 0,-50,0 };
 
 	std::unique_ptr<NonSkinModel> model;
 	TestBox box;

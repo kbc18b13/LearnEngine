@@ -30,6 +30,14 @@ struct Matrix {
 		return DirectX::XMLoadFloat4x4(&dxMat) * mat;
 	}
 
+//////////////staticä÷êî/////////////////////
+
+	static Matrix getWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale) {
+		DirectX::XMMATRIX mat = DirectX::XMMatrixScalingFromVector(scale);
+		mat = DirectX::XMMatrixMultiply(mat, DirectX::XMMatrixRotationQuaternion(rot));
+		mat = DirectX::XMMatrixMultiply(mat, DirectX::XMMatrixTranslationFromVector(pos));
+		return mat;
+	}
 };
 
 }

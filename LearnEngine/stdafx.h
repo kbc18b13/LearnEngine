@@ -5,6 +5,8 @@
 #include <DirectXMath.h>
 #include "Math/Pi.h"
 #include "Math/Vector3.h"
+#include "Math/Vector4.h"
+#include "Math/Quaternion.h"
 #include "Math/Matrix.h"
 
 //スマートポインタ

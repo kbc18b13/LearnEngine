@@ -103,6 +103,10 @@ union Vector3 {
 	static Vector3 AxisZ() {
 		return Vector3(0, 0, 1);
 	}
+
+	static Vector3 Identity() {
+		return Vector3(1, 1, 1);
+	}
 };
 
 }

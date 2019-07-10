@@ -62,8 +62,8 @@ void GraphicEngine::Init(HWND hwnd) {
 	}
 
 	//ビューポートの設定
-	viewport.Height = rect.bottom - rect.top;
-	viewport.Width = rect.right - rect.left;
+	viewport.Height = static_cast<float>(rect.bottom - rect.top);
+	viewport.Width = static_cast<float>(rect.right - rect.left);
 	viewport.MaxDepth = 1.0f;
 	viewport.MinDepth = 0.0f;
 	viewport.TopLeftX = 0.0f;
@@ -100,7 +100,7 @@ void GraphicEngine::Init(HWND hwnd) {
 		D3D11_RASTERIZER_DESC rsDesc{};
 		rsDesc.CullMode = D3D11_CULL_BACK;
 		rsDesc.FillMode = D3D11_FILL_SOLID;
-		rsDesc.FrontCounterClockwise = true;
+		rsDesc.FrontCounterClockwise = false;
 		CComPtr<ID3D11RasterizerState> rsState;
 		result = d3dDevice->CreateRasterizerState(&rsDesc, &rsState);
 		if (FAILED(result)) {
@@ -109,8 +109,14 @@ void GraphicEngine::Init(HWND hwnd) {
 		d3dContext->RSSetState(rsState);
 	}
 
+	//実験用モデル
 	model = loadNonSkinModel("ModelData\\unityChan.cmo");
-	camera.setFar(200.0f);
+
+	//定数バッファの初期化
+	cBuffer.Init();
+
+	//カメラの初期化
+	camera.setFar(300.0f);
 	camera.setNear(1.0f);
 	camera.setAspect(16.0f / 9);
 	camera.setFOV(DegToRad(90.0f));
@@ -119,28 +125,15 @@ void GraphicEngine::Init(HWND hwnd) {
 	camera.setPos(pos);
 	camera.setUp(up);
 
-	D3D11_BUFFER_DESC cBufDesc{};
-	cBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cBufDesc.ByteWidth = sizeof(Matrix);
-	cBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cBufDesc.Usage = D3D11_USAGE_DYNAMIC;
-
-	D3D11_SUBRESOURCE_DATA cBuf{};
-	Matrix proj = camera.getProjMat();
-	cBuf.pSysMem = &proj;
-	result = d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &projCBuf);
-	if (FAILED(result)) {
-		abort();
-	}
-
-	Matrix view = camera.getViewMat();
-	cBuf.pSysMem = &view;
-	result = d3dDevice->CreateBuffer(&cBufDesc, &cBuf, &viewCBuf);
-	if (FAILED(result)) {
-		abort();
-	}
-
+	//実験用ボックス
 	box.Init();
+	{
+		DirectionLight light;
+		light.setColor({ 1,1,1,1 });
+		light.setVec({ 0,-1,0 });
+		cBuffer.setDirectionLight(light);
+		cBuffer.UpdateLight();
+	}
 }
 
 void GraphicEngine::Render() {
@@ -165,18 +158,23 @@ void GraphicEngine::Render() {
 
 	camera.setPos(pos);
 	camera.setUp(up);
-	{
-		D3D11_MAPPED_SUBRESOURCE mapRes;
-		HRESULT res = d3dContext->Map(viewCBuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapRes);
-		if (FAILED(res)) {
-			abort();
-		}
-		*(static_cast<Matrix*>(mapRes.pData)) = camera.getViewMat();
-		d3dContext->Unmap(viewCBuf, 0);
-	}
 
-	d3dContext->VSSetConstantBuffers(0, 1, &projCBuf.p);
-	d3dContext->VSSetConstantBuffers(1, 1, &viewCBuf.p);
+	camera.Apply();
+
+	if (GetAsyncKeyState('T')) {
+		mpos.y += 0.02f;
+	}
+	if (GetAsyncKeyState('G')) {
+		mpos.y -= 0.02f;
+	}
+	if (GetAsyncKeyState('F')) {
+		mpos.x += 0.02f;
+	}
+	if (GetAsyncKeyState('H')) {
+		mpos.x -= 0.02f;
+	}
+	const Quaternion defoRot = Quaternion::GetRotationDeg(Vector3::AxisX(), -90.0f);
+	model->UpdateWorldMatrix(mpos, defoRot);
 
 	d3dContext->OMSetRenderTargets(1, &targetView.p, dsView);
 	d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

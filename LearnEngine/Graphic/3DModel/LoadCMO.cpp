@@ -166,6 +166,7 @@ std::unique_ptr<NonSkinModel> loadNonSkinModel(const char* filePath) {
 
 			//逆さまになってるテクスチャ座標を修正(なんで逆さまなのかしらん)
 			for (UINT v = 0; v < vertexCount; v++) {
+				vertexArray[v].Position.x = 1.0f - vertexArray[v].Position.x;
 				vertexArray[v].TextureCoordinates.y = 1.0f - vertexArray[v].TextureCoordinates.y;
 			}
 
