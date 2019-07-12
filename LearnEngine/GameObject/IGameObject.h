@@ -1,12 +1,18 @@
 #pragma once
 namespace LearnEngine {
+
+class GameObjectManager;
+
 class IGameObject {
 public:
 	bool Start();
 	void Update();
 
-	bool isStarted = false;
-	bool isDeleted = false;
+private:
+	UINT goPriority;
+	UINT goAddress;
+
+	friend class GameObjectManager;
 };
 }
 
