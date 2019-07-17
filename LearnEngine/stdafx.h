@@ -18,3 +18,12 @@
 
 //動的配列
 #include <vector>
+
+//グローバル関数
+#include "EngineFunc.h"
+
+//ゲームオブジェクト
+#include "GameObject/IGameObject.h"
+
+//カメラ
+#include "Graphic/Camera/Camera.h"

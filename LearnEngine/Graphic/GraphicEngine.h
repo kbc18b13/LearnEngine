@@ -13,6 +13,9 @@ public:
 
 	void Init(HWND hWnd);
 
+	//描画画面のリセット。描画前に呼ぶ。
+	void ClearRender();
+
 	//毎フレーム呼ぶ描画関数
 	void Render();
 
@@ -26,6 +29,10 @@ public:
 
 	ConstBuffer& getCBuffer() {
 		return cBuffer;
+	}
+
+	Camera& getMainCamera() {
+		return mainCamera;
 	}
 
 private:
@@ -43,7 +50,7 @@ private:
 
 	ConstBuffer cBuffer;
 
-	Camera camera;
+	Camera mainCamera;
 	Vector3 pos = {0,0,70};
 	Vector3 up = { 0, 1, 0 };
 	Vector3 mpos = { 0,-50,0 };
@@ -51,4 +58,16 @@ private:
 	std::unique_ptr<NonSkinModel> model;
 	TestBox box;
 };
+
+//GraphicEngineを取得。Engine.cppで実装されています。
+GraphicEngine& Graphic();
+
+static inline ID3D11Device* D3DDevice() {
+	return Graphic().getDevice();
+};
+
+static inline ID3D11DeviceContext* D3DContext() {
+	return Graphic().getContext();
+};
+
 }

@@ -180,6 +180,7 @@
     <ClCompile Include="Graphic\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EngineFunc.h" />
     <ClInclude Include="Graphic\Camera\Camera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />

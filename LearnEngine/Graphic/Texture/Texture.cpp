@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Texture.h"
 #include "DDSTextureLoader.h"
-#include "Engine.h"
+#include "Graphic/GraphicEngine.h"
 
 namespace LearnEngine {
 

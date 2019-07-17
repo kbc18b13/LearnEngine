@@ -1,17 +1,17 @@
 #include "Engine.h"
+#include "EngineFunc.h"
 #include "Resource/resource.h"
+
+#include "Graphic/GraphicEngine.h"
+#include "GameObject/GameObjectManager.h"
 
 namespace LearnEngine {
 
-static GameEngine g_engine;
-
-GameEngine& Engine() {
-	return g_engine;
-}
+////////メッセージプロシージャとエンジンのメンバ関数////////////////////////
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
-	break;
+		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -19,6 +19,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
+}
+
+GameEngine::GameEngine() : graphic(new GraphicEngine()), goManager(new GameObjectManager()){
+}
+
+GameEngine::~GameEngine() {
 }
 
 void GameEngine::InitEngine(HINSTANCE hInstance, int nCmdShow) {
@@ -52,7 +58,11 @@ void GameEngine::InitEngine(HINSTANCE hInstance, int nCmdShow) {
 
 	}
 
-	graphic.Init(hWnd);
+	//グラフィックエンジン初期化
+	graphic->Init(hWnd);
+
+	//ゲームオブジェクトマネージャー初期化
+	goManager->Init(5, 10);
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
@@ -69,10 +79,55 @@ int GameEngine::MessageLoop() {
 			}
 			DispatchMessage(&msg);
 		}
-		graphic.Render();
+		Update();
 	}
 
 	return (int)msg.wParam;
+}
+
+//private関数
+void GameEngine::Update() {
+	graphic->ClearRender();
+
+	goManager->Update();
+
+	graphic->Render();
+}
+
+
+
+///////////グローバル関数の定義///////////////////
+
+static GameEngine g_engine;
+
+//エンジンを取得
+GameEngine& Engine() {
+	return g_engine;
+}
+
+//グラフィックエンジンを取得
+GraphicEngine& Graphic() {
+	return g_engine.getGraphic();
+}
+
+//ゲームオブジェクトをマネージャーに登録
+void AddGO(IGameObject* go, UINT priority) {
+	return g_engine.getGOManager().AddGO(go, priority);
+}
+
+//ゲームオブジェクトをマネージャーから削除したのち、deleteする
+void DeleteGO(IGameObject* go) {
+	return g_engine.getGOManager().DeleteGO(go);
+}
+
+
+//ゲームオブジェクトをマネージャーから削除
+void RemoveGO(IGameObject* go) {
+	return g_engine.getGOManager().RemoveGO(go);
+}
+
+Camera& MainCamera() {
+	return g_engine.getGraphic().getMainCamera();
 }
 
 }

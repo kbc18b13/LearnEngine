@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "NonSkinModel.h"
 #include "Mesh.h"
-#include "Graphic/ConstBuffer/ConstBuffer.h"
-#include "Engine.h"
+#include "Graphic/GraphicEngine.h"
 
 
 namespace LearnEngine {
@@ -15,7 +14,7 @@ NonSkinModel::NonSkinModel(std::vector<std::unique_ptr<Mesh>>&& meshArray) :
 	meshArray(std::move(meshArray)) {}
 
 void NonSkinModel::UpdateWorldMatrix(const Matrix& mat) {
-	ConstBuffer& cBuffer = Engine().getGraphic().getCBuffer();
+	ConstBuffer& cBuffer = Graphic().getCBuffer();
 	cBuffer.setWorldMatrix(mat);
 	cBuffer.UpdateObject();
 }

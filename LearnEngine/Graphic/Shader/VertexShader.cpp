@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VertexShader.h"
 #include "Graphic/Shader/LoadShader.h"
-#include "Engine.h"
+#include "Graphic/GraphicEngine.h"
 
 namespace LearnEngine {
 

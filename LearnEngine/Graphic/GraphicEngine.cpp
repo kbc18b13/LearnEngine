@@ -109,21 +109,21 @@ void GraphicEngine::Init(HWND hwnd) {
 		d3dContext->RSSetState(rsState);
 	}
 
-	//実験用モデル
-	model = loadNonSkinModel("ModelData\\unityChan.cmo");
+	////実験用モデル
+	//model = loadNonSkinModel("ModelData\\unityChan.cmo");
 
 	//定数バッファの初期化
 	cBuffer.Init();
 
-	//カメラの初期化
-	camera.setFar(300.0f);
-	camera.setNear(1.0f);
-	camera.setAspect(16.0f / 9);
-	camera.setFOV(DegToRad(90.0f));
+	////カメラの初期化
+	//camera.setFar(300.0f);
+	//camera.setNear(1.0f);
+	//camera.setAspect(16.0f / 9);
+	//camera.setFOV(DegToRad(90.0f));
 
-	camera.setLook({ 0, 0, 0 });
-	camera.setPos(pos);
-	camera.setUp(up);
+	//camera.setLook({ 0, 0, 0 });
+	//camera.setPos(pos);
+	//camera.setUp(up);
 
 	//実験用ボックス
 	box.Init();
@@ -136,46 +136,7 @@ void GraphicEngine::Init(HWND hwnd) {
 	}
 }
 
-void GraphicEngine::Render() {
-	const Vector3 eyeline = Vector3(0, 0, 0) - pos;
-	Vector3 axis = up.cross(eyeline);
-
-	Quaternion q;
-	if (GetAsyncKeyState('W')) {
-		q.multiply(Quaternion::GetRotationDeg(axis, 0.2f));
-	}
-	if (GetAsyncKeyState('S')) {
-		q.multiply(Quaternion::GetRotationDeg(axis, -0.2f));
-	}
-	if (GetAsyncKeyState('A')) {
-		q.multiply(Quaternion::GetRotationDeg(Vector3::AxisY(), 0.2f));
-	}
-	if (GetAsyncKeyState('D')) {
-		q.multiply(Quaternion::GetRotationDeg(Vector3::AxisY(), -0.2f));
-	}
-	q.rotateVec(up);
-	q.rotateVec(pos);
-
-	camera.setPos(pos);
-	camera.setUp(up);
-
-	camera.Apply();
-
-	if (GetAsyncKeyState('T')) {
-		mpos.y += 0.02f;
-	}
-	if (GetAsyncKeyState('G')) {
-		mpos.y -= 0.02f;
-	}
-	if (GetAsyncKeyState('F')) {
-		mpos.x += 0.02f;
-	}
-	if (GetAsyncKeyState('H')) {
-		mpos.x -= 0.02f;
-	}
-	const Quaternion defoRot = Quaternion::GetRotationDeg(Vector3::AxisX(), -90.0f);
-	model->UpdateWorldMatrix(mpos, defoRot);
-
+void GraphicEngine::ClearRender() {
 	d3dContext->OMSetRenderTargets(1, &targetView.p, dsView);
 	d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	d3dContext->RSSetViewports(1, &viewport);
@@ -183,8 +144,13 @@ void GraphicEngine::Render() {
 	d3dContext->ClearRenderTargetView(targetView, color);
 	d3dContext->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	mainCamera.Apply();
+}
+
+void GraphicEngine::Render() {
+
 	//box.Draw();
-	model->Draw();
+	//model->Draw();
 	swapChain->Present(0, 0);
 }
 

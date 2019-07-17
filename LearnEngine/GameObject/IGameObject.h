@@ -5,14 +5,18 @@ class GameObjectManager;
 
 class IGameObject {
 public:
-	bool Start();
-	void Update();
+	virtual bool Start();
+	virtual void Update();
+
+	virtual void PostRender();
 
 private:
+	//ゲームオブジェクトマネージャーからprivateメンバをいじられる。
+	friend class GameObjectManager;
+
 	UINT goPriority;
 	UINT goAddress;
-
-	friend class GameObjectManager;
+	bool isDeleted;
 };
 }
 

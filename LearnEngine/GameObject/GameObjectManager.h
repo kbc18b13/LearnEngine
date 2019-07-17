@@ -3,17 +3,6 @@ namespace LearnEngine {
 
 class IGameObject;
 
-struct PriorityGo {
-	PriorityGo(IGameObject* g, UINT p) : goPtr(g), priority(p) {}
-
-	bool operator<(const PriorityGo& pg) {
-		return priority < pg.priority;
-	}
-
-	IGameObject* goPtr;
-	UINT priority;
-};
-
 class GameObjectManager {
 public:
 	GameObjectManager();
@@ -22,13 +11,17 @@ public:
 	void Init(UINT defaultMaxPriority, UINT defaultGoCapacity);
 
 	void AddGO(IGameObject* go, UINT priority);
+
 	void DeleteGO(IGameObject* go);
 
-	void RemoveGO(UINT priority, USHORT address);
+	void RemoveGO(IGameObject* go);
 
 	void Update();
 
 private:
+	//ゲームオブジェクトの優先順位を比較する関数。
+	//ソートに使用すると優先度が低い順に並び替えます。
+	//vectorでケツから見て行って捨てていくためです。
 	static bool GoPriorityComp(IGameObject* a, IGameObject* b);
 
 	UINT defaultGoCapacity = 10;

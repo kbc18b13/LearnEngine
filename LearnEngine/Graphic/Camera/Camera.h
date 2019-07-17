@@ -47,14 +47,14 @@ public:
 	void Apply();
 
 private:
-	Vector3 cameraPos;
-	Vector3 lookingPos;
-	Vector3 cameraUp;
+	Vector3 cameraPos{0,0,-1};
+	Vector3 lookingPos{0,0,0};
+	Vector3 cameraUp{0,1,0};
 
-	float m_far = 0;
-	float m_near = 0;
-	float m_aspect = 0;
-	float m_fov = 0;
+	float m_far = 1000.0f;
+	float m_near = 1.0f;
+	float m_aspect = 16.0f/9.0f;
+	float m_fov = DegToRad(90.0f);
 };
 
 }
