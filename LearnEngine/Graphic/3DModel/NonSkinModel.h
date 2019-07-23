@@ -21,6 +21,10 @@ public:
 	void Draw();
 private:
 	std::vector<std::unique_ptr<Mesh>> meshArray;
+
+#ifdef _DEBUG
+	bool enableWorldMat = false;
+#endif
 };
 
 }

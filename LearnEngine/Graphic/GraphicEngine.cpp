@@ -115,16 +115,6 @@ void GraphicEngine::Init(HWND hwnd) {
 	//定数バッファの初期化
 	cBuffer.Init();
 
-	////カメラの初期化
-	//camera.setFar(300.0f);
-	//camera.setNear(1.0f);
-	//camera.setAspect(16.0f / 9);
-	//camera.setFOV(DegToRad(90.0f));
-
-	//camera.setLook({ 0, 0, 0 });
-	//camera.setPos(pos);
-	//camera.setUp(up);
-
 	//実験用ボックス
 	box.Init();
 	{

@@ -191,6 +191,7 @@
     <MeshContentTask Include="Assets\ModelData\box.FBX">
       <FileType>Document</FileType>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\ModelData\firstStage.fbx" />
     <MeshContentTask Include="Assets\ModelData\pot.FBX" />
     <MeshContentTask Include="Assets\ModelData\sankaku.FBX" />
     <MeshContentTask Include="Assets\ModelData\texbox.FBX" />

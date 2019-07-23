@@ -52,5 +52,6 @@
     <MeshContentTask Include="Assets\ModelData\texbox.FBX" />
     <MeshContentTask Include="Assets\ModelData\unityChan.fbx" />
     <MeshContentTask Include="Assets\ModelData\sankaku.FBX" />
+    <MeshContentTask Include="Assets\ModelData\firstStage.fbx" />
   </ItemGroup>
 </Project>

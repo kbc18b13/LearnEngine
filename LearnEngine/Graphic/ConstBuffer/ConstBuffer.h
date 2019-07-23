@@ -66,9 +66,9 @@ private:
 	CComPtr<ID3D11Buffer> lightCBuf;          //ライトの定数バッファ
 	CComPtr<ID3D11Buffer> objectCBuf;         //オブジェクトの定数バッファ
 
-	CameraCB  camera;
-	LightCB   light;
-	ObjectCB  object;
+	CameraCB  camera{};
+	LightCB   light{};
+	ObjectCB  object{};
 };
 
 }

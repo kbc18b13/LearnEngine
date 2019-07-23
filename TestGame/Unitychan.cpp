@@ -5,12 +5,12 @@
 using namespace LE;
 
 bool Unitychan::Start() {
-	model = loadNonSkinModel("ModelData\\unityChan.cmo");
+	model = loadNonSkinModel("ModelData\\firstStage.cmo");
 	return true;
 }
 
 void Unitychan::Update() {
-	if (GetAsyncKeyState('T')) {
+	/*if (GetAsyncKeyState('T')) {
 		mpos.y += 0.02f;
 	}
 	if (GetAsyncKeyState('G')) {
@@ -21,7 +21,7 @@ void Unitychan::Update() {
 	}
 	if (GetAsyncKeyState('H')) {
 		mpos.x -= 0.02f;
-	}
+	}*/
 	const Quaternion defoRot = Quaternion::GetRotationDeg(Vector3::AxisX(), -90.0f);
 	model->UpdateWorldMatrix(mpos, defoRot);
 }
